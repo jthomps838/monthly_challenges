@@ -1,5 +1,5 @@
 from django.http.response import HttpResponseNotAllowed, HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 # Create your views here.
 
@@ -42,4 +42,13 @@ def monthly_challenge(request, month):
     if month in months:
         month_index = months[month]
         return HttpResponse(f'Challenge for {challenge_goals[month_index]}')
+    return HttpResponseNotFound('No page found')
+
+
+def monthly_challenge_by_number(request, month):
+    if type(month) == int and challenge_goals[month]:
+        word_month = list(months.keys())[list(
+            months.values()).index(month - 1)]
+        if len(word_month) > 0:
+            return redirect(f'/challenges/{word_month}')
     return HttpResponseNotFound('No page found')
